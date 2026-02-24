@@ -8,6 +8,7 @@ services:
       - "8005:8005"
     networks:
       - dokploy-network
+    command: uvicorn main:app --host 0.0.0.0 --port 8005 --proxy-headers --forwarded-allow-ips '*' --root-path /admin/db-config
     environment:
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT:-https://openai-ragbot.openai.azure.com/}
