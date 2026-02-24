@@ -112,5 +112,23 @@ async def save_config(request: Request):
         traceback.print_exc()
         return {"status": "error", "message": str(e)}
 
+class StripPrefixMiddleware:
+    def __init__(self, app, prefix):
+        self.app = app
+        self.prefix = prefix
+        
+    async def __call__(self, scope, receive, send):
+        if scope["type"] in ("http", "websocket"):
+            path = scope.get("path", "")
+            if path.startswith(self.prefix):
+                scope["path"] = path[len(self.prefix):]
+                if not scope["path"]:
+                    scope["path"] = "/"
+                scope["root_path"] = self.prefix
+        return await self.app(scope, receive, send)
+
+if app_root_path and app_root_path != "/":
+    app = StripPrefixMiddleware(app, app_root_path)
+
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8005, reload=True)
