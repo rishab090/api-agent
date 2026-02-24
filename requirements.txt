@@ -10,3 +10,4 @@ mem0ai
 pandas
 SQLAlchemy
 chromadb
+azure-identity
