@@ -100,7 +100,8 @@
     <div class="config-container">
         <div class="header">
             <h2>API Configuration</h2>
-            <button class="btn-cancel" onclick="window.location.href='/'">Back to Chat</button>
+            <button class="btn-cancel" onclick="window.location.href=`{{ request.scope.get('root_path', '') }}/`">Back
+                to Chat</button>
         </div>
 
         <p class="info-text">
@@ -127,7 +128,7 @@
             try {
                 const jsonContent = JSON.parse(editor.value);
 
-                const response = await fetch('/api/config', {
+                const response = await fetch('{{ request.scope.get("root_path", "") }}/api/config', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(jsonContent)
