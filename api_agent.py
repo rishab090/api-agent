@@ -13,7 +13,7 @@ os.environ["AZURE_OPENAI_API_KEY"] = os.environ.get("AZURE_OPENAI_API_KEY", "Rep
 os.environ["AZURE_OPENAI_ENDPOINT"] = os.environ.get("AZURE_OPENAI_ENDPOINT", "https://openai-ragbot.openai.azure.com/")
 
 
-CONFIG_FILE = "config.json"
+CONFIG_FILE = "/app/data/config.json"
 
 def load_api_configs():
     if not os.path.exists(CONFIG_FILE):
@@ -86,7 +86,7 @@ mem0_config = {
         "provider": "chroma",
         "config": {
             "collection_name": "api_agent_memories",
-            "path": "./mem0_chroma",
+            "path": "/app/data/mem0_chroma",
         }
     }
 }

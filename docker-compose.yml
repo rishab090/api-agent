@@ -13,6 +13,5 @@ services:
       - AZURE_DEPLOYMENT_NAME=${AZURE_DEPLOYMENT_NAME:-gpt-4.1-mini}
       - AZURE_EMBEDDING_DEPLOYMENT_NAME=${AZURE_EMBEDDING_DEPLOYMENT_NAME:-text-embedding-3-small}
     volumes:
-      - ./config.json:/app/config.json
-      - ./mem0_chroma:/app/mem0_chroma
+      - /home/technova/app/api_data:/app/data
     restart: unless-stopped
