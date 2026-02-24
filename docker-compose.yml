@@ -14,7 +14,7 @@ services:
       - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-2024-12-01-preview}
       - AZURE_DEPLOYMENT_NAME=${AZURE_DEPLOYMENT_NAME:-gpt-4.1-mini}
       - AZURE_EMBEDDING_DEPLOYMENT_NAME=${AZURE_EMBEDDING_DEPLOYMENT_NAME:-text-embedding-3-small}
-      - ROOT_PATH=/config
+      - ROOT_PATH=/admin/db-config
     volumes:
       - /home/technova/app/api_data:/app/data
     restart: unless-stopped
