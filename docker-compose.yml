@@ -7,7 +7,7 @@ services:
     ports:
       - "8005:8005"
     networks:
-      - ai_agent_network
+      - dokploy-network
     environment:
       - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
       - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT:-https://openai-ragbot.openai.azure.com/}
@@ -19,5 +19,5 @@ services:
     restart: unless-stopped
 
 networks:
-  ai_agent_network:
+  dokploy-network:
     external: true
