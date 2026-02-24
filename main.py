@@ -9,7 +9,9 @@ import uvicorn
 import os
 from api_agent import run_agent, db_manager, memory, reload_agent_config
 
-app = FastAPI()
+app_root_path = os.getenv("ROOT_PATH", "/config")
+
+app = FastAPI(root_path=app_root_path)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
