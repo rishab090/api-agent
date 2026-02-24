@@ -9,7 +9,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
-    <script>window.ROOT_PATH = "{{ request.scope.get('root_path', '') }}";</script>
     <style>
         body {
             background-color: #121212;
@@ -101,8 +100,7 @@
     <div class="config-container">
         <div class="header">
             <h2>API Configuration</h2>
-            <button class="btn-cancel" onclick="window.location.href=(window.ROOT_PATH || '') + '/'">Back to
-                Chat</button>
+            <button class="btn-cancel" onclick="window.location.href='/'">Back to Chat</button>
         </div>
 
         <p class="info-text">
@@ -129,7 +127,7 @@
             try {
                 const jsonContent = JSON.parse(editor.value);
 
-                const response = await fetch((window.ROOT_PATH || '') + '/api/config', {
+                const response = await fetch('/api/config', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(jsonContent)
