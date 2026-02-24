@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Equipment",
+    "pk": "Unique_No",
+    "name_field": "Name",
+    "description": "This table consists of equipment details. ALL items here are inherently considered 'Equipment'. DO NOT filter by 'Category = Equipment' on the Category_Code_2_Description column. The Category_Code_2_Description column represents sub-categories (like 'PRODUCTIVITY SW', 'ACCESSORIES', etc.), NOT the main global 'Equipment' category.",
+    "relationships": [],
+    "api_url": "https://novaxtrack.technovaworld.com/api/zoho/data-from/DataFromZoho_Equipment_Product_Master?per_page=100000&page=1",
+    "json_key": "data",
+    "payload": {
+      "includes": [],
+      "filters": [],
+      "attributes": [
+        "Unique_No",
+        "Name",
+        "Category_Code_2_Description"
+      ],
+      "order_by": []
+    }
+  },
+  {
+    "name": "Spares",
+    "pk": "JDE_Item_Code",
+    "name_field": "Name",
+    "description": "This table consists of spare part details and its relevant details like what equipment it is used in.",
+    "relationships": [
+      {
+        "target_table": "Equipment",
+        "my_cols": [
+          "Equipment_ID"
+        ],
+        "target_cols": [
+          "Unique_No"
+        ]
+      }
+    ],
+    "api_url": "https://novaxtrack.technovaworld.com/api/zoho/data-from/DataFromZoho_Equipment_Spare_Master?per_page=100000&page=1",
+    "json_key": "data",
+    "payload": {
+      "includes": [],
+      "filters": [],
+      "attributes": [
+        "JDE_Item_Code",
+        "Name",
+        "Equipment_ID"
+      ],
+      "order_by": []
+    }
+  },
+  {
+    "name": "Assets",
+    "pk": "Unique_ID",
+    "name_field": "Name",
+    "description": "This table consists of entire details of the assets whether equipments or any other assets.",
+    "relationships": [
+      {
+        "target_table": "Equipment",
+        "my_cols": [
+          "Product_Name"
+        ],
+        "target_cols": [
+          "Id"
+        ]
+      }
+    ],
+    "api_url": "https://novaxtrack.technovaworld.com/api/zoho/data-from/DataFromZoho_Asset_Master?per_page=100000&page=1",
+    "json_key": "data",
+    "payload": {
+      "includes": [],
+      "filters": [],
+      "attributes": [
+        "AMC_Start_End",
+        "Name",
+        "City",
+        "Contract_Type",
+        "Customer_Code",
+        "Customer_Name",
+        "Equipment_Status",
+        "Jde_Code",
+        "Parent_Category",
+        "Name",
+        "Id",
+        "Product_Name",
+        "Country",
+        "Territory"
+      ],
+      "order_by": []
+    }
+  }
+]

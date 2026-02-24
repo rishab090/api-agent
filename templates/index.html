@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Data Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div>
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                    </svg>
+                    DataAgent
+                </div>
+
+                <div class="nav-item" onclick="startNewSession()"
+                    style="background: rgba(255,255,255,0.1); margin-bottom: 20px; cursor: pointer;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Chat
+                </div>
+
+                <ul class="nav-links">
+                    <li class="nav-item active">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                        Current Chat
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-item" onclick="refreshData()"
+                style="border: 1px solid rgba(255,255,255,0.3); margin-bottom: 20px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10" />
+                    <polyline points="1 20 1 14 7 14" />
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10" />
+                    <path d="M22.5 15a9 9 0 0 1-14.85 3.36L1 14" />
+                </svg>
+                Refresh Data
+            </div>
+
+            <a href="/config" class="nav-item"
+                style="text-decoration: none; color: white !important; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 20px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                    </path>
+                </svg>
+                Configuration
+            </a>
+
+            <div class="session-container">
+                <div class="session-label">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Session ID:
+                </div>
+                <div id="session-display" class="session-id-box" title="Click to copy" onclick="copySessionId()">...
+                </div>
+
+                <div class="session-input-group">
+                    <input type="text" id="custom-session-input" class="session-input" placeholder="Enter Session ID">
+                    <button onclick="loadSession()" class="session-load-btn">Load</button>
+                </div>
+            </div>
+        </aside>
+
+        <main class="chat-area">
+            <div class="chat-header">
+                <h2>Live Agent</h2>
+                <div style="font-size: 0.8rem; color: #888;">Connected to SQL Memory DB</div>
+            </div>
+
+            <div class="chat-messages" id="chat-box">
+                <div class="message ai">
+                    Hello! I'm your Data Agent. How can I help you today?
+                </div>
+            </div>
+
+            <div class="typing-indicator" id="typing-indicator" style="display:none;">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Ask a question about your data..."
+                        autocomplete="off">
+                    <button id="send-btn" onclick="sendMessage()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const sessionDisplay = document.getElementById('session-display');
+        const customSessionInput = document.getElementById('custom-session-input');
+
+        let sessionId = localStorage.getItem('api_agent_session_id') || crypto.randomUUID();
+        updateSessionUI();
+
+        function updateSessionUI() {
+            localStorage.setItem('api_agent_session_id', sessionId);
+            sessionDisplay.textContent = sessionId;
+        }
+
+        function startNewSession() {
+            if (confirm("Start a new chat session? This will clear the current screen.")) {
+                sessionId = crypto.randomUUID();
+                updateSessionUI();
+
+                chatBox.innerHTML = '';
+
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'message ai';
+                msgDiv.textContent = `New Session Started (${sessionId}). How can I help?`;
+                chatBox.appendChild(msgDiv);
+
+                customSessionInput.value = '';
+            }
+        }
+
+        function copySessionId() {
+            navigator.clipboard.writeText(sessionId);
+            alert("Session ID copied to clipboard!");
+        }
+
+        async function loadSession() {
+            const newId = customSessionInput.value.trim();
+            if (!newId) return;
+
+            sessionId = newId;
+            updateSessionUI();
+            customSessionInput.value = '';
+
+            chatBox.innerHTML = '';
+            const statusMsg = document.createElement('div');
+            statusMsg.className = 'message ai';
+            statusMsg.textContent = `Loading Session ${sessionId}...`;
+            chatBox.appendChild(statusMsg);
+
+            try {
+                const response = await fetch('/history', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: "history", session_id: sessionId })
+                });
+
+                const data = await response.json();
+
+                if (data.history && Array.isArray(data.history)) {
+                    chatBox.innerHTML = '';
+
+                    if (data.history.length === 0) {
+                        addMessage("No history found for this session.", 'ai');
+                        return;
+                    }
+
+                    data.history.forEach(item => {
+                        if (typeof item === 'string') {
+                            if (item.includes("User:") && item.includes("Assistant:")) {
+                                const splitIndex = item.indexOf("Assistant:");
+                                const userText = item.substring(0, splitIndex).replace("User:", "").trim();
+                                const aiText = item.substring(splitIndex + "Assistant:".length).trim();
+
+                                addMessage(userText, 'user');
+                                addMessage(aiText, 'ai');
+                            } else {
+                                addMessage(item, 'ai');
+                            }
+                        } else {
+                            addMessage(JSON.stringify(item), 'ai');
+                        }
+                    });
+
+                    const marker = document.createElement('div');
+                    marker.style.textAlign = 'center';
+                    marker.style.color = '#666';
+                    marker.style.fontSize = '0.8em';
+                    marker.style.margin = '10px 0';
+                    marker.textContent = `--- History Loaded ---`;
+                    chatBox.appendChild(marker);
+                    scrollToBottom();
+                } else {
+                    statusMsg.textContent = `Error: ${data.error || "Invalid response format"}`;
+                }
+            } catch (e) {
+                console.error("Load Error:", e);
+                statusMsg.textContent = `Client Error: ${e.message}`;
+            }
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            addMessage(text, 'user');
+            userInput.value = '';
+            showTyping(true);
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, session_id: sessionId })
+                });
+                const data = await response.json();
+
+                showTyping(false);
+                addMessage(data.response, 'ai');
+            } catch (e) {
+                showTyping(false);
+                addMessage("Error connecting to server.", 'ai');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+
+            if (sender === 'ai' && typeof marked !== 'undefined') {
+                try {
+                    msgDiv.innerHTML = marked.parse(text);
+                } catch (err) {
+                    msgDiv.textContent = text;
+                }
+            } else {
+                msgDiv.textContent = text;
+            }
+
+            if (typingIndicator && typingIndicator.parentNode === chatBox) {
+                chatBox.insertBefore(msgDiv, typingIndicator);
+            } else {
+                chatBox.appendChild(msgDiv);
+            }
+            scrollToBottom();
+        }
+
+        function showTyping(show) {
+            if (show) {
+                chatBox.appendChild(typingIndicator);
+                typingIndicator.style.display = 'flex';
+            } else {
+                typingIndicator.style.display = 'none';
+            }
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        async function refreshData() {
+            try {
+                const response = await fetch('/refresh', { method: 'POST' });
+                const data = await response.json();
+                alert(data.status);
+            } catch (e) {
+                alert("Refresh failed");
+            }
+        }
+    </script>
+</body>
+
+</html>

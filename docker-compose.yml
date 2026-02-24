@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  api_agent:
+    build: .
+    container_name: api_agent
+    ports:
+      - "8005:8005"
+    volumes:
+      - ./config.json:/app/config.json
+      - ./mem0_chroma:/app/mem0_chroma
+    restart: unless-stopped

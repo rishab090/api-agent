@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - AI Data Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .config-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        textarea {
+            width: 100%;
+            height: 500px;
+            background: #2d2d2d;
+            border: 1px solid #444;
+            color: #a0a0a0;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            resize: vertical;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #666;
+            color: #e0e0e0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            margin: 0;
+            color: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .btn-save {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-cancel {
+            background: #444;
+            color: white;
+        }
+
+        .info-text {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="config-container">
+        <div class="header">
+            <h2>API Configuration</h2>
+            <button class="btn-cancel" onclick="window.location.href='/'">Back to Chat</button>
+        </div>
+
+        <p class="info-text">
+            Modify the JSON configuration below to update tables, relationships, and API endpoints.
+            Click "Save" to apply changes immediately.
+        </p>
+
+        <textarea id="config-editor" spellcheck="false"></textarea>
+
+        <div class="btn-group" style="justify-content: flex-end;">
+            <button class="btn-save" onclick="saveConfig()">Save Configuration</button>
+        </div>
+    </div>
+
+    <script type="application/json" id="config-data">
+        {{ config_json | safe }}
+    </script>
+    <script>
+        const configData = JSON.parse(document.getElementById('config-data').textContent);
+        document.getElementById('config-editor').value = JSON.stringify(configData, null, 2);
+
+        async function saveConfig() {
+            const editor = document.getElementById('config-editor');
+            try {
+                const jsonContent = JSON.parse(editor.value);
+
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonContent)
+                });
+
+                const result = await response.json();
+                if (result.status === 'success') {
+                    alert('Configuration saved and agent reloaded!');
+                } else {
+                    alert('Error saving configuration: ' + result.message);
+                }
+            } catch (e) {
+                alert('Invalid JSON format. Please check your syntax.');
+            }
+        }
+    </script>
+</body>
+
+</html>
