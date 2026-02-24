@@ -9,3 +9,4 @@ python-multipart
 mem0ai
 pandas
 SQLAlchemy
+chromadb
