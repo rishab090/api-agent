@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Optional
 import uvicorn
 import os
-from api_agent import run_agent, db_manager, memory, reload_agent_config
+from api_agent import run_agent, db_manager, memory, reload_agent_config, CONFIG_FILE
 
 app_root_path = os.getenv("ROOT_PATH", "/admin/db-config")
 
@@ -80,8 +80,8 @@ async def refresh_endpoint():
 @app.get("/config")
 async def get_config_page(request: Request):
     try:
-        if os.path.exists("config.json"):
-            with open("config.json", "r") as f:
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, "r") as f:
                 config_data = json.load(f)
         else:
             config_data = []
@@ -102,7 +102,7 @@ async def save_config(request: Request):
     try:
         new_config = await request.json()
         
-        with open("config.json", "w") as f:
+        with open(CONFIG_FILE, "w") as f:
             json.dump(new_config, f, indent=2)
             
         reload_agent_config()

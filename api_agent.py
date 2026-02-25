@@ -15,6 +15,15 @@ os.environ["AZURE_OPENAI_ENDPOINT"] = os.environ.get("AZURE_OPENAI_ENDPOINT", "h
 
 CONFIG_FILE = "/app/data/config.json"
 
+if os.path.exists("config.json") and not os.path.exists(CONFIG_FILE):
+    import shutil
+    try:
+        os.makedirs(os.path.dirname(CONFIG_FILE), exist_ok=True)
+        shutil.copy("config.json", CONFIG_FILE)
+        print(f"Migrated config.json to {CONFIG_FILE}")
+    except Exception as e:
+        print(f"Failed to migrate config.json: {e}")
+
 def load_api_configs():
     if not os.path.exists(CONFIG_FILE):
         return [], []
