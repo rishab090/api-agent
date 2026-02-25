@@ -35,25 +35,25 @@ class ChatRequest(BaseModel):
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
     if request.session.get("user"):
-        return RedirectResponse(url=f"{request.scope.get('root_path', '')}/", status_code=303)
+        return RedirectResponse(url="/admin/db-config/", status_code=303)
     return templates.TemplateResponse("login.html", {"request": request, "error": None})
 
 @app.post("/login")
 async def login(request: Request, email: str = Form(...), password: str = Form(...)):
     if email == "genai@technovaindia.com" and password == "Technova@2026":
         request.session["user"] = email
-        return RedirectResponse(url=f"{request.scope.get('root_path', '')}/", status_code=303)
+        return RedirectResponse(url="/admin/db-config/", status_code=303)
     return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
 
 @app.get("/logout")
 async def logout(request: Request):
     request.session.clear()
-    return RedirectResponse(url=f"{request.scope.get('root_path', '')}/login", status_code=303)
+    return RedirectResponse(url="/admin/db-config/login", status_code=303)
 
 @app.get("/")
 async def get_home(request: Request, user: str = Depends(get_current_user)):
     if not user:
-        return RedirectResponse(url=f"{request.scope.get('root_path', '')}/login", status_code=303)
+        return RedirectResponse(url="/admin/db-config/login", status_code=303)
     return templates.TemplateResponse(request=request, name="index.html")
 
 @app.post("/chat")
@@ -110,7 +110,7 @@ async def refresh_endpoint():
 async def get_config_page(request: Request, user: str = Depends(get_current_user)):
     try:
         if not user:
-            return RedirectResponse(url=f"{request.scope.get('root_path', '')}/login", status_code=303)
+            return RedirectResponse(url="/admin/db-config/login", status_code=303)
             
         if os.path.exists(CONFIG_FILE):
             with open(CONFIG_FILE, "r") as f:

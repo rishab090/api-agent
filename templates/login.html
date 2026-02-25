@@ -206,7 +206,7 @@
         </div>
         {% endif %}
 
-        <form action="{{ request.scope.get('root_path') }}/login" method="POST">
+        <form action="login" method="POST">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <div class="input-wrapper">
@@ -227,7 +227,7 @@
         </form>
 
         <div class="footer-links">
-            <a href="{{ request.scope.get('root_path') }}/chat"><i class="fas fa-arrow-left"></i> Back to Chat
+            <a href="chat"><i class="fas fa-arrow-left"></i> Back to Chat
                 Assistant</a>
         </div>
     </div>
