@@ -1,8 +1,10 @@
 import json
 import traceback
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form, Depends
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Optional
 import uvicorn
@@ -12,6 +14,13 @@ from api_agent import run_agent, db_manager, memory, reload_agent_config, CONFIG
 app_root_path = os.getenv("ROOT_PATH", "/admin/db-config")
 
 app = FastAPI(root_path=app_root_path)
+app.add_middleware(SessionMiddleware, secret_key="technova_secret_key_2026")
+
+async def get_current_user(request: Request):
+    user = request.session.get("user")
+    if not user:
+        return None
+    return user
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -23,8 +32,28 @@ class ChatRequest(BaseModel):
     history: Optional[List[Dict[str, str]]] = []
     language: str = "Default English"
 
+@app.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    if request.session.get("user"):
+        return RedirectResponse(url="/", status_code=303)
+    return templates.TemplateResponse("login.html", {"request": request, "error": None})
+
+@app.post("/login")
+async def login(request: Request, email: str = Form(...), password: str = Form(...)):
+    if email == "genai@technovaindia.com" and password == "Technova@2026":
+        request.session["user"] = email
+        return RedirectResponse(url="/", status_code=303)
+    return templates.TemplateResponse("login.html", {"request": request, "error": "Invalid credentials"})
+
+@app.get("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse(url="/login", status_code=303)
+
 @app.get("/")
-async def get_home(request: Request):
+async def get_home(request: Request, user: str = Depends(get_current_user)):
+    if not user:
+        return RedirectResponse(url="/login", status_code=303)
     return templates.TemplateResponse(request=request, name="index.html")
 
 @app.post("/chat")
@@ -78,8 +107,11 @@ async def refresh_endpoint():
         return {"status": f"Error refreshing data: {str(e)}"}
 
 @app.get("/config")
-async def get_config_page(request: Request):
+async def get_config_page(request: Request, user: str = Depends(get_current_user)):
     try:
+        if not user:
+            return RedirectResponse(url="/login", status_code=303)
+            
         if os.path.exists(CONFIG_FILE):
             with open(CONFIG_FILE, "r") as f:
                 config_data = json.load(f)

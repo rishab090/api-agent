@@ -11,3 +11,4 @@ pandas
 SQLAlchemy
 chromadb
 azure-identity
+itsdangerous
