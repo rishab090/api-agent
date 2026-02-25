@@ -153,7 +153,7 @@ def get_session_context(session_id, window_size=5):
 def select_relevant_tables(user_query, configs):
     table_menu = "\n".join([f"- {c.name}: {c.description}" for c in configs])
     router_prompt = ChatPromptTemplate.from_messages([
-        ("system", "You are a Database Router. Select relevant tables from the list. Return ONLY comma-separated names. IF NO TABLE IS RELEVANT (e.g., query is about general knowledge, manuals, technical specs not in DB), RETURN 'None'. If the query is a simple greeting (like 'hi', 'hey', 'hello'), RETURN 'General'."),
+        ("system", "You are a Database Router. Select relevant tables from the list. Return ONLY comma-separated names. IF NO TABLE IS RELEVANT (e.g., query is about general knowledge, manuals, technical specs not in DB), RETURN 'None'. If the query is a simple greeting or a conversational follow-up about the chat history (e.g., 'hi', 'what did I ask', 'repeat that'), RETURN 'General'."),
         ("human", "Available Tables:\n{menu}\n\nQuery: {query}")
     ])
     chain = router_prompt | llm | CommaSeparatedListOutputParser() # LCEL (LangChain Expression Language)
