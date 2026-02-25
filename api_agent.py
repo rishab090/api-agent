@@ -9,7 +9,7 @@ from sql_memdb import GlobalDataManager
 from mem0 import Memory
 import json
 
-os.environ["AZURE_OPENAI_API_KEY"] = os.environ.get("AZURE_OPENAI_API_KEY", "Replace_With_Your_Azure_API_Key")
+os.environ["AZURE_OPENAI_API_KEY"] = os.environ.get("AZURE_OPENAI_API_KEY", "Azure_API_Key")
 os.environ["AZURE_OPENAI_ENDPOINT"] = os.environ.get("AZURE_OPENAI_ENDPOINT", "https://openai-ragbot.openai.azure.com/")
 
 
